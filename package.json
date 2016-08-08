@@ -5,19 +5,26 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel src/server/index.js > dist/server.js",
-    "start": "babel-node src/server/index.js",
-    "start:watch": "nodemon src/server/index.js --exec babel-node"
+    "build:client": "webpack",
+    "build:server": "babel src/server/index.js > dist/server/server.js",
+    "build": "npm run build:client && npm run build:server",
+    "start": "node dist/server/server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.14.0",
-    "socket.io": "^1.4.8"
+    "socket.io": "^1.4.8",
+    "socket.io-client": "^1.4.8"
   },
   "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-core": "^6.13.2",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.13.2",
     "eslint": "^3.1.1",
     "eslint-config-standard": "^5.3.5",
-    "eslint-plugin-standard": "^2.0.0"
+    "eslint-plugin-standard": "^2.0.0",
+    "webpack": "^1.13.1"
   }
 }
