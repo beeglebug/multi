@@ -1,17 +1,8 @@
-import path from 'path'
-import express from 'express'
-import http from 'http'
 import SocketIO from 'socket.io'
+import webserver from './webserver'
 
-let app = express()
-let server = http.Server(app)
-let io = new SocketIO(server)
-let port = process.env.PORT || 3000;
-let publicDir = path.join(__dirname, '../../dist/client')
+let io = new SocketIO(webserver)
 
-
-app.use(express.static(publicDir))
-console.log(publicDir);
 var network = {
   CONNECTION: 'connection',
   DISCONNECT: 'disconnect',
@@ -20,7 +11,7 @@ var network = {
 }
 
 io.on(network.CONNECTION, (socket) => {
-  console.log('a user connected')
+  console.log('user connected')
 
   socket.on(network.DISCONNECT, () => {
     console.log('user disconnected')
@@ -33,8 +24,4 @@ io.on(network.CONNECTION, (socket) => {
   socket.on(network.LATENCY, (startTime, cb) => {
     cb(startTime)
   })
-})
-
-server.listen(port, () => {
-  console.log('[INFO] Listening on *:' + port)
 })
