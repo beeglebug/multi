@@ -8,7 +8,7 @@
     "build:client": "webpack",
     "build:server": "babel src/server/index.js > dist/server/server.js",
     "build": "npm run build:client && npm run build:server",
-    "start": "node dist/server/server.js"
+    "start": "nodemon src/server/index.js --exec babel-node"
   },
   "author": "",
   "license": "ISC",
