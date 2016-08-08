@@ -1,16 +1,20 @@
 import SocketIOClient from 'socket.io-client'
+import checkLatency from 'checkLatency'
 
-let socket = new SocketIOClient()
+let host = '127.0.0.1'
+let port = 3000
 
-console.log('start', socket);
+connect(host, port)
 
-socket.on('chat', (msg) =>
-  console.log('chat', msg)
-)
+function connect (host, port) {
+  let connection = host + ':' + port
+  let socket = new SocketIOClient(connection)
 
-setInterval(() => {
-  socket.emit('latency', +Date.now(), (startTime) => {
-    var latency = +Date.now() - startTime
-    console.log('ping: ' + latency + 'ms')
-  })
-}, 2000)
+  socket.on('chat', (msg) =>
+    console.log('chat', msg)
+  )
+
+  setInterval(() => {
+    checkLatency(socket)
+  }, 2000)
+}

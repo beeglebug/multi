@@ -1,27 +1,21 @@
 import SocketIO from 'socket.io'
 import webserver from './webserver'
+import { CONNECT, DISCONNECT, CHAT, LATENCY } from '../common/constants/network'
 
 let io = new SocketIO(webserver)
 
-var network = {
-  CONNECTION: 'connection',
-  DISCONNECT: 'disconnect',
-  CHAT: 'chat',
-  LATENCY: 'latency'
-}
-
-io.on(network.CONNECTION, (socket) => {
+io.on(CONNECT, (socket) => {
   console.log('user connected')
 
-  socket.on(network.DISCONNECT, () => {
+  socket.on(DISCONNECT, () => {
     console.log('user disconnected')
   })
 
-  socket.on(network.CHAT, (msg) => {
+  socket.on(CHAT, (msg) => {
     io.emit('chat', msg)
   })
 
-  socket.on(network.LATENCY, (startTime, cb) => {
+  socket.on(LATENCY, (startTime, cb) => {
     cb(startTime)
   })
 })
