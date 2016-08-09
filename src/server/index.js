@@ -33,6 +33,6 @@ io.on(CONNECT, (socket) => {
   })
 
   socket.on(INPUT_STATE, (state) => {
-    console.log(state)
+    console.log('input state: ', state)
   })
 })
