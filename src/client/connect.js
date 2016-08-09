@@ -18,6 +18,8 @@ const connect = function (server) {
   setInterval(() => {
     checkLatency(socket)
   }, 2000)
+
+  return socket
 }
 
 export default connect

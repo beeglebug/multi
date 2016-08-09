@@ -1,8 +1,10 @@
 import socketio from 'socket.io'
 import webserver from './webserver'
-import { CONNECT, DISCONNECT, CHAT, LATENCY, INPUT  } from '../common/constants/network'
+import { CONNECT, DISCONNECT, CHAT, LATENCY, INPUT_STATE } from '../common/constants/network'
 
 let io = socketio(webserver)
+
+console.log('server started')
 
 io.on(CONNECT, (socket) => {
 
@@ -30,7 +32,7 @@ io.on(CONNECT, (socket) => {
     cb(startTime)
   })
 
-  socket.on(INPUT, () => {
-    // switch inputs like flux actions
+  socket.on(INPUT_STATE, (state) => {
+    console.log(state)
   })
 })

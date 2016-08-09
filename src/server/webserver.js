@@ -10,7 +10,7 @@ let port = 3000
 app.use(express.static(publicDir))
 
 webserver.listen(port, () => {
-  console.log('[INFO] Listening on *:' + port)
+  console.log('web server listening on port ' + port)
 })
 
 export default webserver

@@ -1,5 +1,5 @@
-export const CONNECT = 'connection'
+export const CONNECT = 'connect'
 export const DISCONNECT = 'disconnect'
 export const CHAT = 'chat'
 export const LATENCY = 'latency'
-export const INPUT = 'input'
+export const INPUT_STATE = 'input_state'
