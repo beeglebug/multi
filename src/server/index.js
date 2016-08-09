@@ -1,14 +1,14 @@
-import SocketIO from 'socket.io'
+import socketio from 'socket.io'
 import webserver from './webserver'
-import { CONNECT, DISCONNECT, CHAT, LATENCY } from '../common/constants/network'
+import { CONNECT, DISCONNECT, CHAT, LATENCY, INPUT  } from '../common/constants/network'
 
-let io = new SocketIO(webserver)
+let io = socketio(webserver)
 
 io.on(CONNECT, (socket) => {
-  console.log('user connected')
+  console.log('connection established')
 
   socket.on(DISCONNECT, () => {
-    console.log('user disconnected')
+    console.log('disconnected')
   })
 
   socket.on(CHAT, (msg) => {
@@ -17,5 +17,9 @@ io.on(CONNECT, (socket) => {
 
   socket.on(LATENCY, (startTime, cb) => {
     cb(startTime)
+  })
+
+  socket.on(INPUT, () => {
+    // switch inputs like flux actions
   })
 })

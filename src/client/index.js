@@ -6,5 +6,3 @@ let server = {
 }
 
 connect(server)
-
-
