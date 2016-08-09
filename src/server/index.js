@@ -5,16 +5,27 @@ import { CONNECT, DISCONNECT, CHAT, LATENCY, INPUT  } from '../common/constants/
 let io = socketio(webserver)
 
 io.on(CONNECT, (socket) => {
+
+  // new connection received
+  // authorisation?
   console.log('connection established')
 
+  // send initial data
+  socket.emit('boot', {
+    map: {}
+  })
+
+  // catch disconnections
   socket.on(DISCONNECT, () => {
     console.log('disconnected')
   })
 
+  // chat messages
   socket.on(CHAT, (msg) => {
     io.emit('chat', msg)
   })
 
+  // return latency information
   socket.on(LATENCY, (startTime, cb) => {
     cb(startTime)
   })
