@@ -1,4 +1,4 @@
-import Vec2 from './Vec2'
+import Vec2 from '../math/Vec2'
 
 export default class Box {
   constructor (width = 1, height = 1, x = 0, y = 0) {
