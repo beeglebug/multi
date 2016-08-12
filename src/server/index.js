@@ -2,6 +2,10 @@ import socketio from 'socket.io'
 import webserver from './webserver'
 import { CONNECT, DISCONNECT, CHAT, LATENCY, INPUT_STATE } from '../common/constants/network'
 
+import { test } from './physics'
+
+test()
+
 let io = socketio(webserver)
 
 console.log('server started')
