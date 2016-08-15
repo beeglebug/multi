@@ -32,7 +32,7 @@ io.on(CONNECT, (socket) => {
   // authorisation?
   console.log('player connected (total players: ' + (players.length + 1) + ')')
 
-  let player = new Entity()
+  let player = Entity.create()
   player.socket = socket
   playersBySocketId[socket.id] = player
   playersById[player.id] = player
@@ -43,7 +43,6 @@ io.on(CONNECT, (socket) => {
   // send initial data
   socket.emit(BOOT, {
     player: toNetwork(player),
-    map: {},
     players: near.map((player) => {
       return toNetwork(player)
     })
@@ -78,7 +77,6 @@ io.on(CONNECT, (socket) => {
   })
 
   socket.on(INPUT_STATE, (state) => {
-    console.log('input state update: ', state)
     state.forEach((action) => {
       switch (action) {
         case MOVE_UP:
@@ -95,9 +93,12 @@ io.on(CONNECT, (socket) => {
           break
       }
     })
-  })
-  let nearBy = getNearbyPlayers(player, players)
-  nearBy.forEach((nearByPlayer) => {
-    nearByPlayer.socket.emit(STATE_UPDATE, toNetwork(player))
+    // TODO only emit if the new state is different to the old one
+    let nearBy = getNearbyPlayers(player, players)
+    let updatedState = toNetwork(player)
+    console.log('input state update:', state, 'emitting to', nearBy.length, 'players')
+    nearBy.forEach((nearByPlayer) => {
+      nearByPlayer.socket.emit(STATE_UPDATE, updatedState)
+    })
   })
 })

@@ -1,6 +1,7 @@
 import io from 'socket.io-client'
 import checkLatency from './checkLatency'
 import { CHAT, JOIN, LEAVE, BOOT, STATE_UPDATE } from '../common/constants/network'
+import Entity from '../common/Entity'
 
 let playersById = {}
 
@@ -14,9 +15,9 @@ const connect = function (server) {
   socket.on(BOOT, (data) => {
     console.log('boot', data)
     data.players.forEach((player) => {
-      playersById[player.id] = player
+      playersById[player.id] = Entity.hydrate(player)
     })
-    playersById[data.player.id] = data.player
+    playersById[data.player.id] = Entity.hydrate(data.player)
   })
 
   // chat message received
@@ -26,7 +27,7 @@ const connect = function (server) {
 
   socket.on(JOIN, (player) => {
     console.log('join', player)
-    playersById[ player.id ] = player
+    playersById[ player.id ] = Entity.hydrate(player)
   })
 
   socket.on(LEAVE, (id) => {
