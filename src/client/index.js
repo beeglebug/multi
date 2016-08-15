@@ -1,5 +1,6 @@
 import connect from './connect'
 import { INPUT_STATE } from '../common/constants/network'
+import { MOVE_LEFT, MOVE_RIGHT, MOVE_DOWN, MOVE_UP } from '../common/constants/actions'
 import equal from 'array-equal'
 
 // get this from some kind of server list
@@ -25,20 +26,20 @@ setInterval(() => {
 
   currentInputState = []
 
-  if (isDown(bindings[ACTIONS.MOVE_UP])) {
-    currentInputState.push(ACTIONS.MOVE_UP)
+  if (isDown(bindings[MOVE_UP])) {
+    currentInputState.push(MOVE_UP)
   }
 
-  if (isDown(bindings[ACTIONS.MOVE_LEFT])) {
-    currentInputState.push(ACTIONS.MOVE_LEFT)
+  if (isDown(bindings[MOVE_LEFT])) {
+    currentInputState.push(MOVE_LEFT)
   }
 
-  if (isDown(bindings[ACTIONS.MOVE_DOWN])) {
-    currentInputState.push(ACTIONS.MOVE_DOWN)
+  if (isDown(bindings[MOVE_DOWN])) {
+    currentInputState.push(MOVE_DOWN)
   }
 
-  if (isDown(bindings[ACTIONS.MOVE_RIGHT])) {
-    currentInputState.push(ACTIONS.MOVE_RIGHT)
+  if (isDown(bindings[MOVE_RIGHT])) {
+    currentInputState.push(MOVE_RIGHT)
   }
 
   if (!equal(previousInputState, currentInputState)) {

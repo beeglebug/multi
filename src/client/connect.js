@@ -1,6 +1,6 @@
 import io from 'socket.io-client'
 import checkLatency from './checkLatency'
-import { CHAT, JOIN, LEAVE, BOOT } from '../common/constants/network'
+import { CHAT, JOIN, LEAVE, BOOT, STATE_UPDATE } from '../common/constants/network'
 
 let playersById = {}
 
@@ -32,6 +32,15 @@ const connect = function (server) {
   socket.on(LEAVE, (id) => {
     console.log('leave', id)
     delete playersById[id]
+  })
+
+  socket.on(STATE_UPDATE, (state) => {
+    console.log('state', state)
+    let player = playersById[state.id]
+    if (player) {
+      player.position.x = state.x
+      player.position.y = state.y
+    }
   })
 
   setInterval(() => {

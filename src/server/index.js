@@ -1,6 +1,7 @@
 import socketio from 'socket.io'
 import webserver from './webserver'
-import { CONNECT, DISCONNECT, CHAT, LATENCY, INPUT_STATE, JOIN, LEAVE, BOOT } from '../common/constants/network'
+import { CONNECT, DISCONNECT, CHAT, LATENCY, INPUT_STATE, JOIN, LEAVE, BOOT, STATE_UPDATE } from '../common/constants/network'
+import { MOVE_LEFT, MOVE_RIGHT, MOVE_DOWN, MOVE_UP } from '../common/constants/actions'
 import Entity from '../common/Entity'
 
 let io = socketio(webserver)
@@ -77,6 +78,26 @@ io.on(CONNECT, (socket) => {
   })
 
   socket.on(INPUT_STATE, (state) => {
-    console.log('input state: ', state)
+    console.log('input state update: ', state)
+    state.forEach((action) => {
+      switch (action) {
+        case MOVE_UP:
+          player.position.y -= 1
+          break
+        case MOVE_DOWN:
+          player.position.y += 1
+          break
+        case MOVE_LEFT:
+          player.position.X -= 1
+          break
+        case MOVE_RIGHT:
+          player.position.x += 1
+          break
+      }
+    })
+  })
+  let nearBy = getNearbyPlayers(player, players)
+  nearBy.forEach((nearByPlayer) => {
+    nearByPlayer.socket.emit(STATE_UPDATE, toNetwork(player))
   })
 })
