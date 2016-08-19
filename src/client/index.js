@@ -6,6 +6,7 @@ import Entity from '../common/Entity'
 import { MOVE_LEFT, MOVE_RIGHT, MOVE_DOWN, MOVE_UP } from '../common/constants/actions'
 import equal from 'array-equal'
 import THREE from 'three'
+import makeCube from './renderer/makeCube'
 
 // get this from some kind of server list
 let server = {
@@ -24,15 +25,6 @@ function makePlayer (data) {
   var player = Entity.hydrate(data)
   player.renderable = makeCube(player.position)
   return player
-}
-
-function makeCube (position) {
-  var geometry = new THREE.BoxGeometry(1, 1, 1)
-  let color = Math.random() * 0xffffff
-  var material = new THREE.MeshBasicMaterial({ color: color })
-  var cube = new THREE.Mesh(geometry, material)
-  cube.position.set(position.x, position.y, 0)
-  return cube
 }
 
 function addPlayer (data) {
