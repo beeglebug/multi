@@ -80,13 +80,13 @@ io.on(CONNECT, (socket) => {
     state.forEach((action) => {
       switch (action) {
         case MOVE_UP:
-          player.position.y -= 1
-          break
-        case MOVE_DOWN:
           player.position.y += 1
           break
+        case MOVE_DOWN:
+          player.position.y -= 1
+          break
         case MOVE_LEFT:
-          player.position.X -= 1
+          player.position.x -= 1
           break
         case MOVE_RIGHT:
           player.position.x += 1
