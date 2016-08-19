@@ -6,6 +6,7 @@ let id = 0
 export default class Entity {
   constructor () {
     this.position = new Vec2()
+    this.dirty = false
   }
 
   static create () {

@@ -27,12 +27,12 @@ const toNetwork = (entity) => {
 }
 
 io.on(CONNECT, (socket) => {
-
   // new connection received
   // authorisation?
   console.log('player connected (total players: ' + (players.length + 1) + ')')
 
   let player = Entity.create()
+  player.inputState = []
   player.socket = socket
   playersBySocketId[socket.id] = player
   playersById[player.id] = player
@@ -77,30 +77,54 @@ io.on(CONNECT, (socket) => {
   })
 
   socket.on(INPUT_STATE, (state) => {
-    state.forEach((action) => {
-      switch (action) {
-        case MOVE_UP:
-          player.position.y += 1
-          break
-        case MOVE_DOWN:
-          player.position.y -= 1
-          break
-        case MOVE_LEFT:
-          player.position.x -= 1
-          break
-        case MOVE_RIGHT:
-          player.position.x += 1
-          break
-      }
-    })
-    // TODO only emit if the new state is different to the old one
-    let nearBy = getNearbyPlayers(player, players)
-    let updatedState = toNetwork(player)
-    console.log('input state update:', state, 'emitting to', nearBy.length, 'players')
-    nearBy.forEach((nearByPlayer) => {
-      nearByPlayer.socket.emit(STATE_UPDATE, updatedState)
-    })
-    // and back to the player
-    player.socket.emit(STATE_UPDATE, updatedState)
+    player.inputState = state
   })
 })
+
+let tick = 1000 / 10
+
+let movementAmount = 0.1
+
+setInterval(() => {
+  // apply current input state each tick where one exists
+  players
+    .filter((player) => {
+      return player.inputState.length > 0
+    })
+    .forEach((player) => {
+      player.dirty = true
+      player.inputState.forEach((action) => {
+        switch (action) {
+          case MOVE_UP:
+            player.position.y += movementAmount
+            break
+          case MOVE_DOWN:
+            player.position.y -= movementAmount
+            break
+          case MOVE_LEFT:
+            player.position.x -= movementAmount
+            break
+          case MOVE_RIGHT:
+            player.position.x += movementAmount
+            break
+        }
+      })
+    })
+
+  // go through dirty entities
+  // notify nearby players of their new positions
+  players
+    .filter((entity) => {
+      return entity.dirty === true
+    })
+    .forEach((entity) => {
+      let nearBy = getNearbyPlayers(entity, players)
+      let updatedState = toNetwork(entity)
+      // TODO batch these so clients get multiple in one packet
+      nearBy.forEach((nearByPlayer) => {
+        nearByPlayer.socket.emit(STATE_UPDATE, updatedState)
+      })
+      // reset dirty flag
+      entity.dirty = false
+    })
+}, tick)
