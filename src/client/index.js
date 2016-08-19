@@ -48,6 +48,7 @@ function removePlayer (id) {
   players = players.filter((player) => {
     return targetPlayer !== player
   })
+  scene.remove(targetPlayer.renderable)
   delete playersById[id]
 }
 
