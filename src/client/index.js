@@ -157,7 +157,9 @@ var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHei
 var renderer = new THREE.WebGLRenderer()
 renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
-// scene.add(cube)
+var axisHelper = new THREE.AxisHelper(5)
+scene.add(axisHelper)
+
 scene.background = new THREE.Color(0xDDDDDD)
 camera.position.z = 10
 camera.position.y = 3
