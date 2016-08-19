@@ -35,6 +35,7 @@ function makeCube (position) {
 
 function addPlayer (data) {
   let player = makePlayer(data)
+  scene.add(player.renderable)
   players.push(player)
   playersById[player.id] = player
 }
