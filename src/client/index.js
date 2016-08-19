@@ -1,7 +1,6 @@
-import { INPUT_STATE } from '../common/constants/network'
 import io from 'socket.io-client'
 import checkLatency from './checkLatency'
-import { CHAT, JOIN, LEAVE, BOOT, STATE_UPDATE } from '../common/constants/network'
+import { CHAT, JOIN, LEAVE, BOOT, STATE_UPDATE, INPUT_STATE } from '../common/constants/network'
 import Entity from '../common/Entity'
 import { MOVE_LEFT, MOVE_RIGHT, MOVE_DOWN, MOVE_UP } from '../common/constants/actions'
 import equal from 'array-equal'
