@@ -63,7 +63,7 @@ function cameraFollow (entity) {
   camera.lookAt(entity.position)
 }
 
-const connect = function (server) {
+const connect = (server) => {
   let connection = server.host + ':' + server.port
   let socket = io.connect(connection)
 
