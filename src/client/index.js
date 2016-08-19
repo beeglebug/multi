@@ -28,7 +28,8 @@ function makePlayer (data) {
 
 function makeCube (position) {
   var geometry = new THREE.BoxGeometry(1, 1, 1)
-  var material = new THREE.MeshBasicMaterial({ color: 0x999999 })
+  let color = Math.random() * 0xffffff
+  var material = new THREE.MeshBasicMaterial({ color: color })
   var cube = new THREE.Mesh(geometry, material)
   cube.position.set(position.x, position.y, 0)
   return cube
