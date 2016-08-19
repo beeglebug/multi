@@ -100,5 +100,7 @@ io.on(CONNECT, (socket) => {
     nearBy.forEach((nearByPlayer) => {
       nearByPlayer.socket.emit(STATE_UPDATE, updatedState)
     })
+    // and back to the player
+    player.socket.emit(STATE_UPDATE, updatedState)
   })
 })
