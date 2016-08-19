@@ -110,7 +110,7 @@ import { isDown, bindKeyboard, bindings } from './input'
 
 bindKeyboard(document)
 
-let interval = 1000 / 25
+let tick = 1000 / 25
 
 var currentInputState = []
 var previousInputState = []
@@ -141,7 +141,7 @@ setInterval(() => {
   previousInputState = currentInputState
 
   // also do it locally
-}, interval)
+}, tick)
 
 var scene = new THREE.Scene()
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
