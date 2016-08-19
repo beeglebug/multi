@@ -48,6 +48,16 @@ function removePlayer (id) {
   delete playersById[id]
 }
 
+function updatePlayer (state) {
+  let player = playersById[state.id]
+  if (player) {
+    player.position.x = state.x
+    player.position.y = state.y
+    player.renderable.position.x = player.position.x
+    player.renderable.position.y = player.position.y
+  }
+}
+
 const connect = function (server) {
   let connection = server.host + ':' + server.port
   let socket = io.connect(connection)
@@ -78,11 +88,7 @@ const connect = function (server) {
 
   socket.on(STATE_UPDATE, (state) => {
     console.log('state', state)
-    let player = playersById[state.id]
-    if (player) {
-      player.position.x = state.x
-      player.position.y = state.y
-    }
+    updatePlayer(state)
   })
 
   setInterval(() => {
