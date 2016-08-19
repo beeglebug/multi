@@ -10,12 +10,13 @@ import THREE from 'three'
 // get this from some kind of server list
 let server = {
   name: 'test server',
-  host: '127.0.0.1',
+  host: window.location.hostname,
   port: 3000
 }
 
 let players = []
 let playersById = {}
+let currentPlayer = null
 
 window.playersById = playersById
 
@@ -38,6 +39,7 @@ function addPlayer (data) {
   scene.add(player.renderable)
   players.push(player)
   playersById[player.id] = player
+  return player
 }
 
 function removePlayer (id) {
@@ -55,7 +57,17 @@ function updatePlayer (state) {
     player.position.y = state.y
     player.renderable.position.x = player.position.x
     player.renderable.position.y = player.position.y
+    if (player === currentPlayer) {
+      cameraFollow(player)
+    }
   }
+}
+
+function cameraFollow (entity) {
+  camera.position.x = entity.position.x
+  camera.position.y = entity.position.y - 3
+  camera.position.z = 10
+  camera.lookAt(entity.position)
 }
 
 const connect = function (server) {
@@ -68,7 +80,7 @@ const connect = function (server) {
     data.players.forEach((player) => {
       addPlayer(player)
     })
-    addPlayer(data.player)
+    currentPlayer = addPlayer(data.player)
   })
 
   // chat message received
@@ -146,6 +158,8 @@ document.body.appendChild(renderer.domElement)
 // scene.add(cube)
 scene.background = new THREE.Color(0xDDDDDD)
 camera.position.z = 10
+camera.position.y = 3
+camera.lookAt(new THREE.Vector3(0, 0, 0))
 
 function render () {
   window.requestAnimationFrame(render)
