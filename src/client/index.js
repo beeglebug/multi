@@ -146,4 +146,9 @@ document.body.appendChild(renderer.domElement)
 // scene.add(cube)
 scene.background = new THREE.Color(0xDDDDDD)
 camera.position.z = 10
-renderer.render(scene, camera)
+
+function render () {
+  window.requestAnimationFrame(render)
+  renderer.render(scene, camera)
+}
+render()
