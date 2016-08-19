@@ -101,7 +101,7 @@ const connect = function (server) {
   })
 
   socket.on(STATE_UPDATE, (state) => {
-    console.log('state', state)
+    // console.log('state', state)
     updatePlayer(state)
   })
 
