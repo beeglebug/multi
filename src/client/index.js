@@ -21,7 +21,7 @@ let currentPlayer = null
 window.playersById = playersById
 
 function makePlayer (data) {
-  var player = Entity.hydrate(data)
+  let player = Entity.hydrate(data)
   player.renderable = makeCube(player.position)
   return player
 }
@@ -73,7 +73,7 @@ const connect = (server) => {
     data.players.forEach((player) => {
       addPlayer(player)
     })
-    currentPlayer = addPlayer(data.player)
+    window.currentPlayer = currentPlayer = addPlayer(data.player)
   })
 
   // chat message received
@@ -112,44 +112,77 @@ bindKeyboard(document)
 
 let tick = 1000 / 25
 
-var currentInputState = []
-var previousInputState = []
+let currentInputState = []
+let previousInputState = []
 
 setInterval(() => {
   currentInputState = []
-
   if (isDown(bindings[MOVE_UP])) {
     currentInputState.push(MOVE_UP)
   }
-
   if (isDown(bindings[MOVE_LEFT])) {
     currentInputState.push(MOVE_LEFT)
   }
-
   if (isDown(bindings[MOVE_DOWN])) {
     currentInputState.push(MOVE_DOWN)
   }
-
   if (isDown(bindings[MOVE_RIGHT])) {
     currentInputState.push(MOVE_RIGHT)
   }
-
   if (!equal(previousInputState, currentInputState)) {
     socket.emit(INPUT_STATE, currentInputState)
   }
-
   previousInputState = currentInputState
-
-  // also do it locally
 }, tick)
 
-var scene = new THREE.Scene()
-var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-var renderer = new THREE.WebGLRenderer()
+// also do it locally
+
+
+let moveTick = 1000 / 10
+let movementAmount = 0.3
+
+setInterval(() => {
+  if (!currentPlayer) {
+    return
+  }
+  currentInputState.forEach((action) => {
+    switch (action) {
+      case MOVE_UP:
+        currentPlayer.position.y += movementAmount
+        break
+      case MOVE_DOWN:
+        currentPlayer.position.y -= movementAmount
+        break
+      case MOVE_LEFT:
+        currentPlayer.position.x -= movementAmount
+        break
+      case MOVE_RIGHT:
+        currentPlayer.position.x += movementAmount
+        break
+    }
+  })
+  currentPlayer.renderable.position.x = currentPlayer.position.x
+  currentPlayer.renderable.position.y = currentPlayer.position.y
+  cameraFollow(currentPlayer)
+}, moveTick)
+
+
+
+
+
+let scene = new THREE.Scene()
+let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+let renderer = new THREE.WebGLRenderer()
 renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
-var axisHelper = new THREE.AxisHelper(5)
+let axisHelper = new THREE.AxisHelper(5)
 scene.add(axisHelper)
+
+let light = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6)
+light.color.setHSL(0.6, 1, 0.6)
+light.groundColor.setHSL(0.095, 1, 0.75)
+light.position.set(0, 500, 0)
+scene.add(light)
 
 scene.background = new THREE.Color(0xDDDDDD)
 camera.position.z = 10

@@ -83,7 +83,7 @@ io.on(CONNECT, (socket) => {
 
 let tick = 1000 / 10
 
-let movementAmount = 0.1
+let movementAmount = 0.3
 
 setInterval(() => {
   // apply current input state each tick where one exists
@@ -124,6 +124,7 @@ setInterval(() => {
       nearBy.forEach((nearByPlayer) => {
         nearByPlayer.socket.emit(STATE_UPDATE, updatedState)
       })
+      entity.socket.emit(STATE_UPDATE, updatedState)
       // reset dirty flag
       entity.dirty = false
     })
