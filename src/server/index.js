@@ -22,7 +22,8 @@ const toNetwork = (entity) => {
   return {
     id: entity.id,
     x: entity.position.x,
-    y: entity.position.y
+    y: entity.position.y,
+    color: entity.color
   }
 }
 
@@ -34,6 +35,7 @@ io.on(CONNECT, (socket) => {
   let player = Entity.create()
   player.inputState = []
   player.socket = socket
+  player.color = Math.random() * 0xffffff
   playersBySocketId[socket.id] = player
   playersById[player.id] = player
   players.push(player)

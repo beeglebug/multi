@@ -4,25 +4,20 @@ import { CHAT, JOIN, LEAVE, BOOT, STATE_UPDATE, INPUT_STATE } from '../common/co
 import Entity from '../common/Entity'
 import { MOVE_LEFT, MOVE_RIGHT, MOVE_DOWN, MOVE_UP } from '../common/constants/actions'
 import equal from 'array-equal'
-import THREE from 'three'
-import makeCube from './renderer/makeCube'
 
-// get this from some kind of server list
-let server = {
-  name: 'test server',
-  host: window.location.hostname,
-  port: 3000
-}
+import makeCube from './renderer/makeCube'
+import getServer from './getServer'
+import { camera, scene, renderer } from './renderer/scene'
+
+let server = getServer()
 
 let players = []
 let playersById = {}
 let currentPlayer = null
 
-window.playersById = playersById
-
 function makePlayer (data) {
   let player = Entity.hydrate(data)
-  player.renderable = makeCube(player.position)
+  player.renderable = makeCube(player.position, player.color)
   return player
 }
 
@@ -167,30 +162,10 @@ setInterval(() => {
 }, moveTick)
 
 
-
-
-
-let scene = new THREE.Scene()
-let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-let renderer = new THREE.WebGLRenderer()
-renderer.setSize(window.innerWidth, window.innerHeight)
-document.body.appendChild(renderer.domElement)
-let axisHelper = new THREE.AxisHelper(5)
-scene.add(axisHelper)
-
-let light = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6)
-light.color.setHSL(0.6, 1, 0.6)
-light.groundColor.setHSL(0.095, 1, 0.75)
-light.position.set(0, 500, 0)
-scene.add(light)
-
-scene.background = new THREE.Color(0xDDDDDD)
-camera.position.z = 10
-camera.position.y = 3
-camera.lookAt(new THREE.Vector3(0, 0, 0))
-
 function render () {
   window.requestAnimationFrame(render)
   renderer.render(scene, camera)
 }
 render()
+
+window.playersById = playersById

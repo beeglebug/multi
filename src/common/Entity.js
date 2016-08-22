@@ -5,8 +5,10 @@ let id = 0
 
 export default class Entity {
   constructor () {
+    this.id = null
     this.position = new Vec2()
     this.dirty = false
+    this.color = 0xFFFFFF
   }
 
   static create () {
@@ -20,6 +22,7 @@ export default class Entity {
     entity.id = data.id
     entity.position.x = data.x
     entity.position.y = data.y
+    entity.color = data.color
     return entity
   }
 }
