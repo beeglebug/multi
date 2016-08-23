@@ -2,18 +2,14 @@ import io from 'socket.io-client'
 import checkLatency from './checkLatency'
 import { CHAT, JOIN, LEAVE, BOOT, STATE_UPDATE, INPUT_STATE } from '../common/constants/network'
 import Entity from '../common/Entity'
-import { MOVE_LEFT, MOVE_RIGHT, MOVE_DOWN, MOVE_UP } from '../common/constants/actions'
 import equal from 'array-equal'
-
+import { bindKeyboard } from './input/keyboard'
 import makeCube from './renderer/makeCube'
 import getServer from './getServer'
+import getState from './input/getState'
+import applyInput from './input/applyInput'
 import { camera, scene, renderer } from './renderer/scene'
-
-let server = getServer()
-
-let players = []
-let playersById = {}
-let currentPlayer = null
+import cameraFollow from './renderer/cameraFollow'
 
 function makePlayer (data) {
   let player = Entity.hydrate(data)
@@ -43,19 +39,7 @@ function updatePlayer (state) {
   if (player) {
     player.position.x = state.x
     player.position.y = state.y
-    player.renderable.position.x = player.position.x
-    player.renderable.position.y = player.position.y
-    if (player === currentPlayer) {
-      cameraFollow(player)
-    }
   }
-}
-
-function cameraFollow (entity) {
-  camera.position.x = entity.position.x
-  camera.position.y = entity.position.y - 3
-  camera.position.z = 10
-  camera.lookAt(entity.position)
 }
 
 const connect = (server) => {
@@ -98,74 +82,42 @@ const connect = (server) => {
   return socket
 }
 
-// do this on some kind of player input
-let socket = connect(server);
+function render () {
+  window.requestAnimationFrame(render)
+  players.forEach((player) => {
+    player.renderable.position.x = player.position.x
+    player.renderable.position.y = player.position.y
+  })
+  cameraFollow(currentPlayer, camera)
+  renderer.render(scene, camera)
+}
 
-import { isDown, bindKeyboard, bindings } from './input'
-
-bindKeyboard(document)
-
+let server = getServer()
+let socket = connect(server)
+let players = []
+let playersById = {}
+let currentPlayer = null
 let tick = 1000 / 25
-
+let moveTick = 1000 / 10
 let currentInputState = []
 let previousInputState = []
 
+bindKeyboard(document)
+
+window.playersById = playersById
+
 setInterval(() => {
-  currentInputState = []
-  if (isDown(bindings[MOVE_UP])) {
-    currentInputState.push(MOVE_UP)
-  }
-  if (isDown(bindings[MOVE_LEFT])) {
-    currentInputState.push(MOVE_LEFT)
-  }
-  if (isDown(bindings[MOVE_DOWN])) {
-    currentInputState.push(MOVE_DOWN)
-  }
-  if (isDown(bindings[MOVE_RIGHT])) {
-    currentInputState.push(MOVE_RIGHT)
-  }
+  currentInputState = getState()
   if (!equal(previousInputState, currentInputState)) {
     socket.emit(INPUT_STATE, currentInputState)
   }
   previousInputState = currentInputState
 }, tick)
 
-// also do it locally
-
-
-let moveTick = 1000 / 10
-let movementAmount = 0.3
-
 setInterval(() => {
-  if (!currentPlayer) {
-    return
+  if (currentPlayer) {
+    applyInput(currentInputState, currentPlayer)
   }
-  currentInputState.forEach((action) => {
-    switch (action) {
-      case MOVE_UP:
-        currentPlayer.position.y += movementAmount
-        break
-      case MOVE_DOWN:
-        currentPlayer.position.y -= movementAmount
-        break
-      case MOVE_LEFT:
-        currentPlayer.position.x -= movementAmount
-        break
-      case MOVE_RIGHT:
-        currentPlayer.position.x += movementAmount
-        break
-    }
-  })
-  currentPlayer.renderable.position.x = currentPlayer.position.x
-  currentPlayer.renderable.position.y = currentPlayer.position.y
-  cameraFollow(currentPlayer)
 }, moveTick)
 
-
-function render () {
-  window.requestAnimationFrame(render)
-  renderer.render(scene, camera)
-}
 render()
-
-window.playersById = playersById
