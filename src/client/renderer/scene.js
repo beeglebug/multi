@@ -1,4 +1,5 @@
 import THREE from 'three'
+import cameraFollow from './cameraFollow'
 
 let scene = new THREE.Scene()
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
@@ -22,4 +23,13 @@ camera.position.z = 10
 camera.position.y = 3
 camera.lookAt(new THREE.Vector3(0, 0, 0))
 
-export { camera, scene, renderer }
+export const render = (players, currentPlayer) => {
+  players.forEach((player) => {
+    player.renderable.position.x = player.position.x
+    player.renderable.position.y = player.position.y
+  })
+  cameraFollow(currentPlayer, camera)
+  renderer.render(scene, camera)
+}
+
+export { camera, scene }
