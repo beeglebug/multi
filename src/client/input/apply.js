@@ -1,6 +1,6 @@
 import { MOVE_LEFT, MOVE_RIGHT, MOVE_DOWN, MOVE_UP } from '../../common/constants/actions'
 
-const applyInput = (state, entity) => {
+const apply = (state, entity) => {
   let value = 0.3
   state.forEach((action) => {
     switch (action) {
@@ -20,4 +20,4 @@ const applyInput = (state, entity) => {
   })
 }
 
-export default applyInput
+export default apply

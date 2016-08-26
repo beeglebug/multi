@@ -2,7 +2,7 @@ import { MOVE_LEFT, MOVE_RIGHT, MOVE_DOWN, MOVE_UP } from '../../common/constant
 import { bindings } from './bindings'
 import { isDown } from './keyboard'
 
-const getState = () => {
+const get = () => {
   let state = []
   if (isDown(bindings[MOVE_UP])) {
     state.push(MOVE_UP)
@@ -19,4 +19,4 @@ const getState = () => {
   return state
 }
 
-export default getState
+export default get

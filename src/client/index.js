@@ -2,8 +2,8 @@ import { INPUT_STATE } from '../common/constants/network'
 import equal from 'array-equal'
 import { bindKeyboard } from './input/keyboard'
 import getServer from './network/getServer'
-import getInputState from './input/getInputState'
-import applyInput from './input/applyInput'
+import getInput from './input/get'
+import applyInput from './input/apply'
 import { render } from './renderer/scene'
 import playerStore from './playerStore'
 import connect from './network/connect'
@@ -17,7 +17,7 @@ let previousInputState = []
 bindKeyboard(document)
 
 setInterval(() => {
-  currentInputState = getInputState()
+  currentInputState = getInput()
   if (!equal(previousInputState, currentInputState)) {
     socket.emit(INPUT_STATE, currentInputState)
   }
