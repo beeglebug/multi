@@ -1,6 +1,7 @@
 import { MOVE_LEFT, MOVE_RIGHT, MOVE_DOWN, MOVE_UP } from '../../common/constants/actions'
 
 const apply = (state, entity) => {
+  if (!entity) { return }
   let value = 0.3
   state.forEach((action) => {
     switch (action) {

@@ -22,9 +22,7 @@ setInterval(() => {
     socket.emit(INPUT_STATE, currentInputState)
   }
   previousInputState = currentInputState
-  if (playerStore.host) {
-    applyInput(currentInputState, playerStore.host)
-  }
+  applyInput(currentInputState, playerStore.host)
 }, updateTick)
 
 function renderLoop () {
