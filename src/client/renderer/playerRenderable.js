@@ -1,6 +1,6 @@
 import THREE from 'three'
 
-const makeCube = (position, color) => {
+const playerRenderable = (position, color) => {
   var geometry = new THREE.BoxGeometry(1, 1, 1)
   var material = new THREE.MeshPhongMaterial({ color: color })
   var mesh = new THREE.Mesh(geometry, material)
@@ -8,4 +8,4 @@ const makeCube = (position, color) => {
   return mesh
 }
 
-export default makeCube
+export default playerRenderable
