@@ -1,7 +1,7 @@
-const checkLatency = (socket) => {
+const checkLatency = (socket, callback) => {
   socket.emit('latency', +Date.now(), (startTime) => {
     var latency = +Date.now() - startTime
-    // console.log('ping: ' + latency + 'ms')
+    callback(latency)
   })
 }
 

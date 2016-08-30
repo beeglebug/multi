@@ -24,11 +24,6 @@ let playerStore = {
     })
     delete this.byId[id]
     // scene.remove(removing.renderable)
-  },
-  updateById: (id, state) => {
-    let player = this.byId[id]
-    player.position.x = state.x
-    player.position.y = state.y
   }
 }
 

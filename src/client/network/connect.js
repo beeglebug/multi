@@ -6,6 +6,7 @@ import playerStore from '../playerStore'
 const connect = (server) => {
   let connection = server.host + ':' + server.port
   let socket = io.connect(connection)
+  let latency = 0
 
   // receive initial data
   socket.on(BOOT, (data) => {
@@ -31,14 +32,20 @@ const connect = (server) => {
     playerStore.removeById(id)
   })
 
+  // will get an update every tick (1000/25)
   socket.on(STATE_UPDATE, (state) => {
-    // console.log('state', state)
-    playerStore.updateById(state.id, state)
+    // TODO use known latency value
+    let player = playerStore.byId[state.id]
+    // TODO store history of state changes
+    player.position.x = state.x
+    player.position.y = state.y
   })
 
   setInterval(() => {
-    checkLatency(socket)
-  }, 2000)
+    checkLatency(socket, (ms) => {
+      latency = ms
+    })
+  }, 1000)
 
   return socket
 }

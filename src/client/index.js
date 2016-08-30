@@ -22,6 +22,7 @@ setInterval(() => {
     socket.emit(INPUT_STATE, currentInputState)
   }
   previousInputState = currentInputState
+  // client side input prediction
   applyInput(currentInputState, playerStore.host)
 }, updateTick)
 
