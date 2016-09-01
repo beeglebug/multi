@@ -83,7 +83,7 @@ io.on(CONNECT, (socket) => {
   })
 })
 
-let updateTick = 1000 / 25
+let tickRate = 20
 
 let movementAmount = 0.3
 
@@ -130,4 +130,4 @@ setInterval(() => {
       // reset dirty flag
       entity.dirty = false
     })
-}, updateTick)
+}, 1000 / tickRate)

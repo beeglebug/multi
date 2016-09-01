@@ -32,11 +32,9 @@ const connect = (server) => {
     playerStore.removeById(id)
   })
 
-  // will get an update every tick (1000/25)
+  // will get an update every tick (50ms)
   socket.on(STATE_UPDATE, (state) => {
-    // TODO use known latency value
     let player = playerStore.byId[state.id]
-    // TODO store history of state changes
     player.position.x = state.x
     player.position.y = state.y
   })

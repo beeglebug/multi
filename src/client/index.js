@@ -10,7 +10,7 @@ import connect from './network/connect'
 
 let server = getServer()
 let socket = connect(server)
-let updateTick = 1000 / 25
+let tickRate = 20
 let currentInputState = []
 let previousInputState = []
 
@@ -24,7 +24,7 @@ setInterval(() => {
   previousInputState = currentInputState
   // client side input prediction
   applyInput(currentInputState, playerStore.host)
-}, updateTick)
+}, 1000 / tickRate)
 
 function renderLoop () {
   window.requestAnimationFrame(renderLoop)
