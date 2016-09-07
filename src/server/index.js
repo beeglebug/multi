@@ -11,6 +11,7 @@ console.log('server started')
 let players = []
 let playersBySocketId = {}
 let playersById = {}
+let tick = 0;
 
 const getNearbyPlayers = (player, players) => {
   return players.filter((otherPlayer) => {
@@ -44,6 +45,7 @@ io.on(CONNECT, (socket) => {
 
   // send initial data
   socket.emit(BOOT, {
+    tick: tick, // tick tick boom
     player: toNetwork(player),
     players: near.map((player) => {
       return toNetwork(player)
@@ -130,4 +132,7 @@ setInterval(() => {
       // reset dirty flag
       entity.dirty = false
     })
+
+  // increase the tick counter
+  tick++
 }, 1000 / tickRate)
