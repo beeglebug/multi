@@ -28,6 +28,6 @@ setInterval(() => {
 
 function renderLoop () {
   window.requestAnimationFrame(renderLoop)
-  render()
+  render([], null)
 }
 renderLoop()
