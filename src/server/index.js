@@ -1,6 +1,6 @@
 import socketio from 'socket.io'
 import webserver from './webserver'
-import { CONNECT, DISCONNECT, CHAT, LATENCY, INPUT_STATE, JOIN, LEAVE, BOOT, STATE_UPDATE } from '../common/constants/network'
+import { CONNECT, DISCONNECT, CHAT, LATENCY, INPUT_STATE, JOIN, LEAVE, HANDSHAKE, STATE_UPDATE } from '../common/constants/network'
 import { MOVE_LEFT, MOVE_RIGHT, MOVE_DOWN, MOVE_UP } from '../common/constants/actions'
 import Entity from '../common/Entity'
 
@@ -44,7 +44,7 @@ io.on(CONNECT, (socket) => {
   let near = getNearbyPlayers(player, players)
 
   // send initial data
-  socket.emit(BOOT, {
+  socket.emit(HANDSHAKE, {
     tick: tick, // tick tick boom
     player: toNetwork(player),
     players: near.map((player) => {

@@ -1,7 +1,7 @@
 import Entity from '../common/Entity'
 import playerRenderable from './renderer/playerRenderable'
 
-let playerStore = {
+let entityStore = {
   all: [],
   byId: {},
   host: null,
@@ -27,4 +27,4 @@ let playerStore = {
   }
 }
 
-export default playerStore
+export default entityStore

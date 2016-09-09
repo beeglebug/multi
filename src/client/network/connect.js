@@ -1,20 +1,20 @@
 import io from 'socket.io-client'
-import { CHAT, JOIN, LEAVE, BOOT, STATE_UPDATE } from '../../common/constants/network'
+import { CHAT, JOIN, LEAVE, HANDSHAKE, STATE_UPDATE } from '../../common/constants/network'
 import checkLatency from './checkLatency'
-import playerStore from '../playerStore'
+import entityStore from '../entityStore'
 
-const connect = (server) => {
+const connect = (server, game) => {
   let connection = server.host + ':' + server.port
   let socket = io.connect(connection)
-  let latency = 0
+  game.latency = 0
 
   // receive initial data
-  socket.on(BOOT, (data) => {
-    console.log('boot', data)
+  socket.on(HANDSHAKE, (data) => {
+    console.log('HANDSHAKE', data)
     data.players.forEach((player) => {
-      playerStore.add(player)
+      entityStore.add(player)
     })
-    playerStore.host = playerStore.add(data.player)
+    game.player = entityStore.add(data.player)
   })
 
   // chat message received
@@ -24,24 +24,24 @@ const connect = (server) => {
 
   socket.on(JOIN, (player) => {
     console.log('join', player)
-    playerStore.add(player)
+    entityStore.add(player)
   })
 
   socket.on(LEAVE, (id) => {
     console.log('leave', id)
-    playerStore.removeById(id)
+    entityStore.removeById(id)
   })
 
   // will get an update every tick (50ms)
   socket.on(STATE_UPDATE, (state) => {
-    let player = playerStore.byId[state.id]
+    let player = entityStore.byId[state.id]
     player.position.x = state.x
     player.position.y = state.y
   })
 
   setInterval(() => {
     checkLatency(socket, (ms) => {
-      latency = ms
+      game.latency = ms
     })
   }, 1000)
 
