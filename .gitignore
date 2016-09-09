@@ -1,4 +1,5 @@
 node_modules/
 .idea/
 dist/client/client.js
+dist/client/client.js.map
 npm-debug.log
