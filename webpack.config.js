@@ -4,6 +4,9 @@ module.exports = {
   entry: [
     './src/client/index.js'
   ],
+  cache: true,
+  debug: true,
+  devtool: 'source-map',
   output: {
     path: path.join(__dirname, 'dist/client'),
     filename: 'client.js'
