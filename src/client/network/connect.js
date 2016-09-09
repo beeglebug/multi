@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 import { CHAT, JOIN, LEAVE, HANDSHAKE, STATE_UPDATE } from '../../common/constants/network'
+import Entity from '../../common/Entity'
 import checkLatency from './checkLatency'
-import entityStore from '../entityStore'
 
 const connect = (server, game) => {
   let connection = server.host + ':' + server.port
@@ -12,9 +12,9 @@ const connect = (server, game) => {
   socket.on(HANDSHAKE, (data) => {
     console.log('HANDSHAKE', data)
     data.players.forEach((player) => {
-      entityStore.add(player)
+      game.entities.add(player)
     })
-    game.player = entityStore.add(data.player)
+    game.player = game.entities.add(data.player)
   })
 
   // chat message received
@@ -22,14 +22,15 @@ const connect = (server, game) => {
     console.log('chat', msg)
   )
 
-  socket.on(JOIN, (player) => {
+  socket.on(JOIN, (data) => {
+    let player = Entity.hydrate(data)
     console.log('join', player)
-    entityStore.add(player)
+    game.entities.add(player)
   })
 
   socket.on(LEAVE, (id) => {
     console.log('leave', id)
-    entityStore.removeById(id)
+    game.entities.removeById(id)
   })
 
   // will get an update every tick (50ms)

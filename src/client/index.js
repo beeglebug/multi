@@ -27,3 +27,5 @@ function renderLoop () {
 }
 
 renderLoop()
+
+window.game = game
